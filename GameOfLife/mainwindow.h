@@ -40,12 +40,16 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    //private functions
     void createBoard();
     int getCellState(Node*);
     void setInitialState(Cell*);
     void calculateCells();
     void game();
     int checkNeighbours(Node*);
+    void createNodes();
+    void linkNodes(std::vector<std::vector<Node*>> nodes);
+    void populateNodes(std::vector<std::vector<Node*>> nodes);
 
 
     //private attributes
@@ -57,7 +61,6 @@ private:
     QPushButton *cell;
     QPushButton *clickedCell;
     int cellAmount = 0;
-    int cellState = 0;
     int gridSize = 0;
     bool gameState  = false;
 

@@ -5,9 +5,9 @@
 void Cell::setCellState(int state)
 {
     if (state == 0) {
-        this->cellState = 0;
+        this->cellState = false;
     } else {
-        this->cellState = 1;
+        this->cellState = true;
     }
 }
 

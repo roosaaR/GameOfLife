@@ -3,6 +3,7 @@
 #include "cell.h"
 
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -23,23 +24,22 @@ void MainWindow::createBoard()
 
     ui->gridLayout->setSpacing(0);
 
+    //Node* nodes[gridSize][gridSize];
+
+    createNodes();
+
+    //Copying Nodes from two-dimensional array to unordered set.
+    for (int i=0; i < gridSize; ++i) {
+        for (int j=0; i < gridSize; ++i) {
+            allCells.insert(nodes[i][j]);
+         }
+     }
+}
+
+void MainWindow::linkNodes(std::vector<std::vector<Node*>> nodes) {
+
     int row = 0;
     int column = 0;
-
-    //Creates two-dimensional array with Nodes(struct)
-    Node* nodes[gridSize][gridSize];
-
-    for (int i=0; i < cellAmount; ++i) {
-        if (column == gridSize) {
-            row += 1;
-            column = 0;
-        }
-        nodes[row][column] = new Node;
-        column += 1;
-    }
-
-    row = 0;
-    column = 0;
 
     for (int i=0; i < cellAmount; ++i) {
         if (column == gridSize) {
@@ -66,13 +66,17 @@ void MainWindow::createBoard()
         } else {
             node->left = nodes[row][leftIndex];
         } if (rightIndex > gridSize) {
+            node->right = nullptr;
+        } else {
             node->right = nodes[row][rightIndex];
         }
         column += 1;
     }
+}
 
-    row = 0;
-    column = 0;
+void MainWindow::populateNodes(std::vector<std::vector<Node*>> nodes) {
+    int row = 0;
+    int column = 0;
 
     for (int i=0; i < cellAmount; ++i) {
         Cell *cell = new Cell(this);
@@ -91,15 +95,30 @@ void MainWindow::createBoard()
 
         ui->gridLayout->addWidget(cell, row, column);
         column += 1;
-        }
-
-        //Copying Nodes from two-dimensional array to unordered set.
-        for (int i=0; i < gridSize; ++i) {
-            for (int j=0; i < gridSize; ++i) {
-                allCells.insert(nodes[i][j]);
-            }
-        }
     }
+}
+
+void MainWindow::createNodes() {
+    int row = 0;
+    int column = 0;
+
+    //Creates two-dimensional array with Nodes(struct)
+    //Node* nodes[gridSize][gridSize];
+    std::vector<std::vector<Node*>> nodes;
+
+    for (int i=0; i < cellAmount; ++i) {
+        if (column == gridSize) {
+            row += 1;
+            column = 0;
+        }
+        nodes[row][column] = new Node;
+        column += 1;
+    }
+
+    linkNodes(nodes);
+    populateNodes(nodes);
+}
+
 
 void MainWindow::game() {
     //Actual game implementation

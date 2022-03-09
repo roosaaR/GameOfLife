@@ -14,9 +14,9 @@ public:
 
 
 private:
-    // If cellState = 1, cell is alive and if cellState = 0,
+    // If cellState = true, cell is alive and if cellState = false,
     // cell is dead
-    int cellState = 0;
+    int cellState = false;
 };
 
 #endif // CELL_H
