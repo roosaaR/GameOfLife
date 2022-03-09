@@ -1,7 +1,6 @@
 #include "cell.h"
 
 
-
 void Cell::setCellState(int state)
 {
     if (state == 0) {

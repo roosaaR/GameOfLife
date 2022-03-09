@@ -47,18 +47,16 @@ private:
     void calculateCells();
     void game();
     int checkNeighbours(Node*);
-    void createNodes();
-    void linkNodes(std::vector<std::vector<Node*>> nodes);
-    void populateNodes(std::vector<std::vector<Node*>> nodes);
+    void createNodes(std::vector<std::vector<Node*>> &nodes);
+    void linkNodes(std::vector<std::vector<Node*>> &nodes);
+    void populateNodes(std::vector<std::vector<Node*>> &nodes);
 
 
     //private attributes
-
     std::unordered_set<Node*> allCells;
     std::vector<QPushButton*> initialCells;
     QWidget *widget;
     QGridLayout *layout;
-    QPushButton *cell;
     QPushButton *clickedCell;
     int cellAmount = 0;
     int gridSize = 0;

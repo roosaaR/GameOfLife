@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "cell.h"
+#include <iostream>
 
 
 
@@ -19,16 +20,18 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::createBoard()
-{
-    //Creates N x N board with pushButtons. PushButtons represent cells
+{   //Creates N x N board with pushButtons. PushButtons represent cells
 
     ui->gridLayout->setSpacing(0);
 
-    //Node* nodes[gridSize][gridSize];
+    //Creates two-dimensional vector with Nodes(struct)
+    std::vector<std::vector<Node*>> nodes;
 
-    createNodes();
+    createNodes(nodes);
+    linkNodes(nodes);
+    populateNodes(nodes);
 
-    //Copying Nodes from two-dimensional array to unordered set.
+    //Copying Nodes from two-dimensional vector to unordered set.
     for (int i=0; i < gridSize; ++i) {
         for (int j=0; i < gridSize; ++i) {
             allCells.insert(nodes[i][j]);
@@ -36,10 +39,12 @@ void MainWindow::createBoard()
      }
 }
 
-void MainWindow::linkNodes(std::vector<std::vector<Node*>> nodes) {
+void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
 
     int row = 0;
     int column = 0;
+
+    qDebug() << nodes.size();
 
     for (int i=0; i < cellAmount; ++i) {
         if (column == gridSize) {
@@ -74,7 +79,8 @@ void MainWindow::linkNodes(std::vector<std::vector<Node*>> nodes) {
     }
 }
 
-void MainWindow::populateNodes(std::vector<std::vector<Node*>> nodes) {
+void MainWindow::populateNodes(std::vector<std::vector<Node*>> &nodes) {
+
     int row = 0;
     int column = 0;
 
@@ -98,32 +104,30 @@ void MainWindow::populateNodes(std::vector<std::vector<Node*>> nodes) {
     }
 }
 
-void MainWindow::createNodes() {
+void MainWindow::createNodes(std::vector<std::vector<Node*>> &nodes) {
+
     int row = 0;
     int column = 0;
 
-    //Creates two-dimensional array with Nodes(struct)
-    //Node* nodes[gridSize][gridSize];
-    std::vector<std::vector<Node*>> nodes;
+    std::vector<Node*> rowOfNodes;
 
     for (int i=0; i < cellAmount; ++i) {
         if (column == gridSize) {
+            nodes.push_back(rowOfNodes);
+            rowOfNodes.clear();
             row += 1;
             column = 0;
         }
-        nodes[row][column] = new Node;
+        rowOfNodes.push_back(new Node);
+        //nodes[row][column] = new Node;
         column += 1;
     }
-
-    linkNodes(nodes);
-    populateNodes(nodes);
 }
-
 
 void MainWindow::game() {
     //Actual game implementation
 
-    int neighbourCells = 0;
+    //int neighbourCells = 0;
 
     /*for (Node* cell : allCells) {
         //If the cell is dead
@@ -198,7 +202,7 @@ void MainWindow::on_boardDimension_valueChanged(int arg1) {
 }
 
 void MainWindow::on_createBoard_clicked()
-{   // Creates gameboard when start button is clicked.
+{   // Creates gameboard when createBoard button is clicked.
     calculateCells();
     gameState = true;
     createBoard();
