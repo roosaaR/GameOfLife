@@ -38,7 +38,7 @@
      </property>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -56,9 +56,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="createBoard">
+      <widget class="QPushButton" name="NextButton">
        <property name="text">
-        <string>Create Board</string>
+        <string>Next</string>
        </property>
       </widget>
      </item>
@@ -70,9 +70,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="NextButton">
+      <widget class="QPushButton" name="createBoard">
        <property name="text">
-        <string>Next</string>
+        <string>Create Board</string>
        </property>
       </widget>
      </item>

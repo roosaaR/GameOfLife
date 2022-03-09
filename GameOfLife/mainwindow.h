@@ -10,6 +10,15 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+struct Node {
+    Node* top;
+    Node* bottom;
+    Node* right;
+    Node* left;
+
+    QPushButton button;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -35,9 +44,9 @@ private:
     int getCellState(QPushButton*);
     void setInitialState(QPushButton*);
     void calculateCells();
-    void calculateCellSize();
 
     //private attributes
+
     std::vector<QPushButton*> initialCells;
     std::vector<QPushButton*> allCells;
     QWidget *widget;
@@ -48,7 +57,7 @@ private:
     int cellState = 0;
     int gridSize = 0;
     int cellSize = 0;
-
+    bool gameState  = false;
 
     //Constant for pushbutton's (=cell) size
     static const int CELL_SIZE = 13;
