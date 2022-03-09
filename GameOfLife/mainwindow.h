@@ -5,6 +5,8 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <vector>
+#include <unordered_set>
+#include <cell.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,8 +17,7 @@ struct Node {
     Node* bottom;
     Node* right;
     Node* left;
-
-    QPushButton button;
+    Cell* button;
 };
 
 class MainWindow : public QMainWindow
@@ -40,15 +41,17 @@ private:
     Ui::MainWindow *ui;
 
     void createBoard();
-    void buttonClicked(QPushButton*);
-    int getCellState(QPushButton*);
-    void setInitialState(QPushButton*);
+    int getCellState(Node*);
+    void setInitialState(Cell*);
     void calculateCells();
+    void game();
+    int checkNeighbours(Node*);
+
 
     //private attributes
 
+    std::unordered_set<Node*> allCells;
     std::vector<QPushButton*> initialCells;
-    std::vector<QPushButton*> allCells;
     QWidget *widget;
     QGridLayout *layout;
     QPushButton *cell;
@@ -56,7 +59,6 @@ private:
     int cellAmount = 0;
     int cellState = 0;
     int gridSize = 0;
-    int cellSize = 0;
     bool gameState  = false;
 
     //Constant for pushbutton's (=cell) size
