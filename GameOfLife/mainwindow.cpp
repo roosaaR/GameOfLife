@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    for (Node* node : allCells ) {
+        delete node;
+    }
 }
 
 void MainWindow::createBoard()
@@ -37,6 +40,8 @@ void MainWindow::createBoard()
             allCells.insert(nodes[i][j]);
          }
      }
+
+    nodes.clear();
 }
 
 void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
@@ -45,8 +50,6 @@ void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
 
     int row = 0;
     int column = 0;
-
-    qDebug() << nodes.size();
 
     for (int i=0; i < cellAmount; ++i) {
 
@@ -91,16 +94,15 @@ void MainWindow::populateNodes(std::vector<std::vector<Node*>> &nodes) {
 
     for (int i=0; i < cellAmount; ++i) {
         Cell *cell = new Cell(this);
-        cell->setCellState(0); // Setting a cell "dead"
         nodes[row][column]->cell = cell;
+        cell->setCellState(0); // Setting a cell as "dead"
         cell->setStyleSheet("background-color: grey");
         connect(cell, &QPushButton::clicked, this,
-                           [=]() { setInitialState(cell); });
+                      [=]() { setInitialState(cell); });
+
         cell->setFixedWidth(CELL_SIZE);
         cell->setFixedHeight(CELL_SIZE);
-
         ui->gridLayout->addWidget(cell, row, column);
-
         column += 1;
 
         if (column == gridSize) {
@@ -122,7 +124,6 @@ void MainWindow::createNodes(std::vector<std::vector<Node*>> &nodes) {
 
         rowofNodes.push_back(new Node);
         column += 1;
-
         if (column == gridSize) {
             nodes.push_back(rowofNodes);
             rowofNodes.clear();
@@ -132,45 +133,58 @@ void MainWindow::createNodes(std::vector<std::vector<Node*>> &nodes) {
 }
 
 void MainWindow::game() {
-    //Actual game implementation
+//Actual game implementation
 
-    /*int neighbourCells = 0;
+    int neighbourCells = 0;
 
     for (Node* node : allCells) {
         //If the cell is dead
-        if (node->cell->getCellState() == 0) {
+        if (node->cell->getCellState() == false) {
            neighbourCells = checkNeighbours(node);
            if (neighbourCells == 3) {
+               // Cell turns alive as if by regrowth
                node->cell->setStyleSheet("background-color: purple");
            }
+        }
 
-        } //If the cell is alive
-        else if (node->cell->getCellState() == 1) {
+        //If the cell is alive
+        else if (node->cell->getCellState() == true) {
             neighbourCells = checkNeighbours(node);
             if (neighbourCells == 0 || neighbourCells == 1) {
+                // Cell dies as if by solitude
                 node->cell->setStyleSheet("background-color: grey");
             } else if (neighbourCells >= 4) {
+                // Cells dies as if by overpopulation
                 node->cell->setStyleSheet("background-color: grey");
             } else if (neighbourCells == 2 || neighbourCells == 3) {
+                // Cell remains alive
                 node->cell->setStyleSheet("background-color: purple");
             }
         }
-    }*/
+    }
 }
 
-int checkNeighbours(Node* node) {
+int MainWindow::checkNeighbours(Node* node) {
     //Calculates how many neighbourcells is alive and returns the amount
 
     int neighbourAmount = 0;
 
-    if (node->bottom->cell->getCellState() == true) {
-        neighbourAmount += 1;
-    } if (node->top->cell->getCellState() == true) {
-        neighbourAmount += 1;
-    } if (node->right->cell->getCellState() == true) {
-        neighbourAmount += 1;
-    } if (node->left->cell->getCellState() == true) {
-        neighbourAmount += 1;
+    if(node->bottom != nullptr) {
+        if (node->bottom->cell->getCellState() == true) {
+            neighbourAmount += 1;
+        }
+    } if (node->top != nullptr) {
+        if (node->top->cell->getCellState() == true) {
+            neighbourAmount += 1;
+        }
+    } if (node->right != nullptr) {
+        if (node->right->cell->getCellState() == true) {
+            neighbourAmount += 1;
+        }
+    } if(node->left != nullptr) {
+        if (node->left->cell->getCellState() == true) {
+            neighbourAmount += 1;
+        }
     }
 
     return neighbourAmount;
@@ -185,31 +199,44 @@ void MainWindow::setInitialState(Cell* c) {
     //Creates initial state for the game. Cells turn purple when user
     //clicks them
 
-    clickedCell = static_cast<Cell*>(sender());
-    clickedCell->setStyleSheet("background-color: purple");
-    initialCells.push_back(clickedCell);
+    //clickedCell = static_cast<Cell*>(sender());
+    c->setStyleSheet("background-color: purple");
     c->setCellState(1);
+
+}
+
+void MainWindow::disablePushButtons() {
+
+    for (Node* node : allCells) {
+        node->cell->setDisabled(true);
+    }
 }
 
 void MainWindow::on_StartButton_clicked()
 {   //Starts game and disables some buttons while game is on
-    if (gameState ==  false) {
+    if (gameState == false) {
         return;
     }  else {
         ui->createBoard->setDisabled(true);
         ui->boardDimension->setDisabled(true);
         ui->StartButton->setDisabled(true);
+        ui->NextButton->setDisabled(true);
+        disablePushButtons();
         game();
     }
 }
 
 void MainWindow::on_ClearButton_clicked()
 {   //Clears the gameboard and stops the game
-    createBoard();
-    gameState = false;
-    ui->createBoard->setDisabled(false);
-    ui->boardDimension->setDisabled(false);
-    ui->StartButton->setDisabled(false);
+    if (gameState == false) {
+        return;
+    } else {
+        createBoard();
+        gameState = false;
+        ui->createBoard->setDisabled(false);
+        ui->boardDimension->setDisabled(false);
+        ui->StartButton->setDisabled(false);
+    }
 }
 
 void MainWindow::on_boardDimension_valueChanged(int arg1) {
@@ -222,4 +249,9 @@ void MainWindow::on_createBoard_clicked()
     calculateCells();
     gameState = true;
     createBoard();
+}
+
+void MainWindow::on_NextButton_clicked()
+{
+    game();
 }
