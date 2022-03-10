@@ -10,7 +10,8 @@ public:
     Cell(QWidget *parent = nullptr);
 
     void setCellState(int state);
-    int getCellState();
+
+    bool getCellState();
 
 
 private:

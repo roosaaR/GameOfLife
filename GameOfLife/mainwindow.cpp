@@ -36,7 +36,7 @@ void MainWindow::createBoard()
 
     //Copying Nodes from two-dimensional vector to unordered set.
     for (int i=0; i < gridSize; ++i) {
-        for (int j=0; i < gridSize; ++i) {
+        for (int j=0; j < gridSize; ++j) {
             allCells.insert(nodes[i][j]);
          }
      }
@@ -225,7 +225,7 @@ void MainWindow::setInitialState(Cell* c) {
 
 void MainWindow::disablePushButtons() {
 
-    for (auto& node : allCells) {
+    for (Node* node : allCells) {
         node->cell->setDisabled(true);
     }
 }
