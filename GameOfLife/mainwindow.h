@@ -13,10 +13,8 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 struct Node {
-    Node* top;
-    Node* bottom;
-    Node* right;
-    Node* left;
+
+    std::unordered_set<Node*> neighbourCells;
     Cell* cell;
 };
 

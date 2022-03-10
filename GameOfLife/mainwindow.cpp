@@ -59,22 +59,22 @@ void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
         int leftIndex = column - 1;
         int rightIndex = column + 1;
 
-        if(topIndex < 0) {  // top side of the gameboard
-            node->top = nullptr;
-        } else {
-            node->top = nodes[topIndex][column];
-        } if (bottomIndex >= gridSize) { // bottom side of the gameboard
-            node->bottom = nullptr;
-        } else {
-            node->bottom = nodes[bottomIndex][column];
-        } if (leftIndex < 0) { // left side of the gameboard
-            node->left = nullptr;
-        } else {
-            node->left = nodes[row][leftIndex];
-        } if (rightIndex >= gridSize) { // right side of the gameboard
-            node->right = nullptr;
-        } else {
-            node->right = nodes[row][rightIndex];
+        if(topIndex >= 0) {  // top side of the gameboard
+            node->neighbourCells.insert(nodes[topIndex][column]);
+        } if (bottomIndex < gridSize) { // bottom side of the gameboard
+            node->neighbourCells.insert(nodes[bottomIndex][column]);
+        } if (leftIndex >= 0) { // left side of the gameboard
+            node->neighbourCells.insert(nodes[row][leftIndex]);
+        } if (rightIndex < gridSize) { // right side of the gameboard
+            node->neighbourCells.insert(nodes[row][rightIndex]);
+        } if (topIndex >= 0 && leftIndex >= 0) {
+            node->neighbourCells.insert(nodes[topIndex][leftIndex]);
+        } if (bottomIndex < gridSize && leftIndex >= 0) {
+            node->neighbourCells.insert(nodes[bottomIndex][leftIndex]);
+        } if (bottomIndex < gridSize && rightIndex < gridSize) {
+            node->neighbourCells.insert(nodes[bottomIndex][rightIndex]);
+        } if (topIndex >= 0 && rightIndex < gridSize) {
+            node->neighbourCells.insert(nodes[topIndex][rightIndex]);
         }
         column += 1;
 
@@ -188,22 +188,9 @@ int MainWindow::checkNeighbours(Node* node) {
 
     int neighbourAmount = 0;
 
-    if(node->bottom != nullptr) {
-        if (node->bottom->cell->getCellState() == true) {
-            neighbourAmount += 1;
-        }
-    } if (node->top != nullptr) {
-        if (node->top->cell->getCellState() == true) {
-            neighbourAmount += 1;
-        }
-    } if (node->right != nullptr) {
-        if (node->right->cell->getCellState() == true) {
-            neighbourAmount += 1;
-        }
-    } if (node->left != nullptr) {
-        if (node->left->cell->getCellState() == true) {
-            neighbourAmount += 1;
-        }
+    for (Node* n : node->neighbourCells){
+        if (n->cell->getCellState() == true )
+        neighbourAmount += 1;
     }
 
     return neighbourAmount;
