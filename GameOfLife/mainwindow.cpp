@@ -24,7 +24,7 @@ void MainWindow::createBoard()
 
     ui->gridLayout->setSpacing(0);
 
-    //Creates two-dimensional vector with Nodes(struct)
+    //Initializes a two-dimensional vector of Nodes(struct)
     std::vector<std::vector<Node*>> nodes;
 
     createNodes(nodes);
@@ -40,6 +40,8 @@ void MainWindow::createBoard()
 }
 
 void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
+    // Iterates through gamegrid and links every cell to its neighbourcells.
+    // Every cell has four neighbours.
 
     int row = 0;
     int column = 0;
@@ -47,10 +49,6 @@ void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
     qDebug() << nodes.size();
 
     for (int i=0; i < cellAmount; ++i) {
-        if (column == gridSize) {
-            row += 1;
-            column = 0;
-        }
 
         Node* node = nodes[row][column];
         int topIndex = row - 1;
@@ -58,100 +56,123 @@ void MainWindow::linkNodes(std::vector<std::vector<Node*>> &nodes) {
         int leftIndex = column - 1;
         int rightIndex = column + 1;
 
-        if(topIndex < 0) {
+        if(topIndex < 0) {  // top side of the gameboard
             node->top = nullptr;
         } else {
             node->top = nodes[topIndex][column];
-        } if (bottomIndex > gridSize) {
+        } if (bottomIndex >= gridSize) { // bottom side of the gameboard
             node->bottom = nullptr;
         } else {
             node->bottom = nodes[bottomIndex][column];
-        } if (leftIndex < 0) {
+        } if (leftIndex < 0) { // left side of the gameboard
             node->left = nullptr;
         } else {
             node->left = nodes[row][leftIndex];
-        } if (rightIndex > gridSize) {
+        } if (rightIndex >= gridSize) { // right side of the gameboard
             node->right = nullptr;
         } else {
             node->right = nodes[row][rightIndex];
         }
         column += 1;
+
+        if (column == gridSize) {
+            row += 1;
+            column = 0;
+        }
     }
 }
 
 void MainWindow::populateNodes(std::vector<std::vector<Node*>> &nodes) {
+// Creates a new Cell object for every Node. Cells are pushbuttons
+// and cells are initially dead (grey).
 
     int row = 0;
     int column = 0;
 
     for (int i=0; i < cellAmount; ++i) {
         Cell *cell = new Cell(this);
-        cell->setCellState(0);
-        nodes[row][column]->button = cell;
+        cell->setCellState(0); // Setting a cell "dead"
+        nodes[row][column]->cell = cell;
         cell->setStyleSheet("background-color: grey");
         connect(cell, &QPushButton::clicked, this,
                            [=]() { setInitialState(cell); });
         cell->setFixedWidth(CELL_SIZE);
         cell->setFixedHeight(CELL_SIZE);
 
+        ui->gridLayout->addWidget(cell, row, column);
+
+        column += 1;
+
         if (column == gridSize) {
             row += 1;
             column = 0;
         }
-
-        ui->gridLayout->addWidget(cell, row, column);
-        column += 1;
     }
 }
 
 void MainWindow::createNodes(std::vector<std::vector<Node*>> &nodes) {
+    // Iterates through gamegrid and creates a new Node struct for every cell
+    // Nodes are added to vector
 
-    int row = 0;
     int column = 0;
 
-    std::vector<Node*> rowOfNodes;
+    std::vector<Node*> rowofNodes;
 
     for (int i=0; i < cellAmount; ++i) {
+
+        rowofNodes.push_back(new Node);
+        column += 1;
+
         if (column == gridSize) {
-            nodes.push_back(rowOfNodes);
-            rowOfNodes.clear();
-            row += 1;
+            nodes.push_back(rowofNodes);
+            rowofNodes.clear();
             column = 0;
         }
-        rowOfNodes.push_back(new Node);
-        //nodes[row][column] = new Node;
-        column += 1;
     }
 }
 
 void MainWindow::game() {
     //Actual game implementation
 
-    //int neighbourCells = 0;
+    /*int neighbourCells = 0;
 
-    /*for (Node* cell : allCells) {
+    for (Node* node : allCells) {
         //If the cell is dead
-        if (getCellState(cell) == 0) {
-           neighbourCells = checkNeighbours(cell);
+        if (node->cell->getCellState() == 0) {
+           neighbourCells = checkNeighbours(node);
            if (neighbourCells == 3) {
-               cell->button->setStyleSheet("background-color: purple");
+               node->cell->setStyleSheet("background-color: purple");
            }
 
         } //If the cell is alive
-        else if (getCellState(cell) == 1) {
-            neighbourCells = checkNeighbours(cell);
+        else if (node->cell->getCellState() == 1) {
+            neighbourCells = checkNeighbours(node);
             if (neighbourCells == 0 || neighbourCells == 1) {
-                cell->button->setStyleSheet("background-color: grey");
+                node->cell->setStyleSheet("background-color: grey");
             } else if (neighbourCells >= 4) {
-                cell->button->setStyleSheet("background-color: grey");
+                node->cell->setStyleSheet("background-color: grey");
+            } else if (neighbourCells == 2 || neighbourCells == 3) {
+                node->cell->setStyleSheet("background-color: purple");
             }
         }
     }*/
 }
 
-int checkNeighbours(Node*) {
+int checkNeighbours(Node* node) {
     //Calculates how many neighbourcells is alive and returns the amount
+
     int neighbourAmount = 0;
+
+    if (node->bottom->cell->getCellState() == true) {
+        neighbourAmount += 1;
+    } if (node->top->cell->getCellState() == true) {
+        neighbourAmount += 1;
+    } if (node->right->cell->getCellState() == true) {
+        neighbourAmount += 1;
+    } if (node->left->cell->getCellState() == true) {
+        neighbourAmount += 1;
+    }
+
     return neighbourAmount;
 }
 
@@ -168,11 +189,6 @@ void MainWindow::setInitialState(Cell* c) {
     clickedCell->setStyleSheet("background-color: purple");
     initialCells.push_back(clickedCell);
     c->setCellState(1);
-}
-
-int MainWindow::getCellState(Node*) {
-    //returns 1 if cell is alive and returns 0 if cell is dead
-    return 1;
 }
 
 void MainWindow::on_StartButton_clicked()
