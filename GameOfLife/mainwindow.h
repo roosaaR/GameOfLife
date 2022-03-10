@@ -17,7 +17,7 @@ struct Node {
     Node* bottom;
     Node* right;
     Node* left;
-    Cell* button;
+    Cell* cell;
 };
 
 class MainWindow : public QMainWindow
@@ -37,12 +37,13 @@ private slots:
 
     void on_createBoard_clicked();
 
+    void on_NextButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     //private functions
     void createBoard();
-    int getCellState(Node*);
     void setInitialState(Cell*);
     void calculateCells();
     void game();
@@ -50,11 +51,14 @@ private:
     void createNodes(std::vector<std::vector<Node*>> &nodes);
     void linkNodes(std::vector<std::vector<Node*>> &nodes);
     void populateNodes(std::vector<std::vector<Node*>> &nodes);
+    void disablePushButtons();
+    void setNewState();
 
 
     //private attributes
     std::unordered_set<Node*> allCells;
-    std::vector<QPushButton*> initialCells;
+    std::vector<Node*> dyingCells;
+    std::vector<Node*> awakeningCells;
     QWidget *widget;
     QGridLayout *layout;
     QPushButton *clickedCell;
