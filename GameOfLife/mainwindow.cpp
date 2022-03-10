@@ -138,30 +138,49 @@ void MainWindow::game() {
     int neighbourCells = 0;
 
     for (Node* node : allCells) {
+
         //If the cell is dead
         if (node->cell->getCellState() == false) {
            neighbourCells = checkNeighbours(node);
            if (neighbourCells == 3) {
                // Cell turns alive as if by regrowth
-               node->cell->setStyleSheet("background-color: purple");
+               awakeningCells.push_back(node);
            }
         }
 
         //If the cell is alive
         else if (node->cell->getCellState() == true) {
             neighbourCells = checkNeighbours(node);
-            if (neighbourCells == 0 || neighbourCells == 1) {
+            if ((neighbourCells == 0) || (neighbourCells == 1)) {
                 // Cell dies as if by solitude
-                node->cell->setStyleSheet("background-color: grey");
+                dyingCells.push_back(node);
             } else if (neighbourCells >= 4) {
                 // Cells dies as if by overpopulation
-                node->cell->setStyleSheet("background-color: grey");
-            } else if (neighbourCells == 2 || neighbourCells == 3) {
+                dyingCells.push_back(node);
+            } else if ((neighbourCells == 2) || (neighbourCells == 3)) {
                 // Cell remains alive
-                node->cell->setStyleSheet("background-color: purple");
+                awakeningCells.push_back(node);
             }
         }
     }
+
+    setNewState();
+}
+
+void MainWindow::setNewState() {
+    // Cells turn dead
+     for(Node* node : dyingCells) {
+        node->cell->setStyleSheet("background-color: grey");
+        node->cell->setCellState(0);
+     }
+     dyingCells.clear();
+
+     // Cells turn alive
+     for (Node* node : awakeningCells) {
+         node->cell->setStyleSheet("background-color: purple");
+         node->cell->setCellState(1);
+     }
+     awakeningCells.clear();
 }
 
 int MainWindow::checkNeighbours(Node* node) {
@@ -181,7 +200,7 @@ int MainWindow::checkNeighbours(Node* node) {
         if (node->right->cell->getCellState() == true) {
             neighbourAmount += 1;
         }
-    } if(node->left != nullptr) {
+    } if (node->left != nullptr) {
         if (node->left->cell->getCellState() == true) {
             neighbourAmount += 1;
         }
@@ -202,12 +221,11 @@ void MainWindow::setInitialState(Cell* c) {
     //clickedCell = static_cast<Cell*>(sender());
     c->setStyleSheet("background-color: purple");
     c->setCellState(1);
-
 }
 
 void MainWindow::disablePushButtons() {
 
-    for (Node* node : allCells) {
+    for (auto& node : allCells) {
         node->cell->setDisabled(true);
     }
 }
