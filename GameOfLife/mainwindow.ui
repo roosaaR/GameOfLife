@@ -17,7 +17,7 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>50</y>
       <width>531</width>
       <height>461</height>
@@ -41,15 +41,33 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>385</width>
+      <width>511</width>
       <height>27</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>Gill Sans Ultra Bold Condensed</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Game of Life  </string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="StartButton">
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Start</string>
        </property>
@@ -57,6 +75,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="NextButton">
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Next</string>
        </property>
@@ -64,6 +87,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="ClearButton">
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Clear</string>
        </property>
@@ -71,6 +99,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="createBoard">
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Create Board</string>
        </property>

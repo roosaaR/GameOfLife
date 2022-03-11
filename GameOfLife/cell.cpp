@@ -2,15 +2,18 @@
 
 
 void Cell::setCellState(int state)
+// Sets cell alive, if parameter state is 1 and
+// sets cell dead if parameter is 0.
 {
     if (state == 0) {
         this->cellState = false;
-    } else {
+    } else if (state == 1) {
         this->cellState = true;
     }
 }
 
-int Cell::getCellState()
+bool Cell::getCellState()
+// Returns true if cell is alive and false if cell is dead.
 {
     return this->cellState;
 }

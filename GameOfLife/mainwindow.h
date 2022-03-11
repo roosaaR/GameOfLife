@@ -26,6 +26,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void game();
+
 private slots:
     void on_StartButton_clicked();
 
@@ -44,16 +47,18 @@ private:
     void createBoard();
     void setInitialState(Cell*);
     void calculateCells();
-    void game();
     int checkNeighbours(Node*);
     void createNodes(std::vector<std::vector<Node*>> &nodes);
     void linkNodes(std::vector<std::vector<Node*>> &nodes);
     void populateNodes(std::vector<std::vector<Node*>> &nodes);
-    void disablePushButtons();
+    void disableCells();
     void setNewState();
+    void changePushButtonsState(bool state);
+    void enableCells();
 
 
     //private attributes
+    QTimer *timer;
     std::unordered_set<Node*> allCells;
     std::vector<Node*> dyingCells;
     std::vector<Node*> awakeningCells;
