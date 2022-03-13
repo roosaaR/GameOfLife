@@ -53,8 +53,6 @@ public slots:
 private slots:
     void on_StartButton_clicked();
 
-    void on_ClearButton_clicked();
-
     void on_boardDimension_valueChanged(int arg1);
 
     void on_createBoard_clicked();
@@ -87,7 +85,6 @@ private:
     int cellAmount = 0;
     int gridSize = 10;
     int round = 0;
-    bool gameState  = false;
 
     //Constant for pushbutton's (=cell) size
     static const int CELL_SIZE = 13;

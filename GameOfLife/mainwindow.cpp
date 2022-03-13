@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->boardDimension->setMinimum(15); // Minimum size of the N x N gameboard
     ui->boardDimension->setMaximum(40);  // Maximum size of the N x N gameboard
+    ui->createBoard->setStyleSheet("background-color: thistle");
     MainWindow::changePushButtonsState(true);
     connect(timer, SIGNAL(timeout()), this, SLOT(game()));
     MainWindow::on_createBoard_clicked();
@@ -177,8 +178,9 @@ void MainWindow::game() {
 
     if (awakeningCells.size() == 0 && dyingCells.size() == 0) {
     // If none of the cells is going to turn alive or dead (= game is over)
+        ui->boardDimension->setDisabled(false);
+        changePushButtonsState(true);
         round += 1;
-        on_ClearButton_clicked();
     } else {
          setNewState(); // Setting cells to a new state after each "round"
     }
@@ -227,8 +229,8 @@ void MainWindow::setInitialState(Cell* c) {
 
     c->setStyleSheet("background-color: purple");
     c->setCellState(true);
-    ui->boardDimension->setDisabled(true);
-    ui->createBoard->setDisabled(true);
+    //ui->boardDimension->setDisabled(true);
+    //ui->createBoard->setDisabled(true);
     changePushButtonsState(false);
 }
 
@@ -244,20 +246,20 @@ void MainWindow::on_StartButton_clicked() {
 // When Start button is clicked, game function is called in every
 // 0.5 seconds and the game goes on until the Clear button is clicked.
 
-    if (gameState == false) {
+    //if (gameState == false) {
         return;
-    }  else {
-        ui->createBoard->setDisabled(true);
-        ui->boardDimension->setDisabled(true);
+    //}  else {
+        //ui->createBoard->setDisabled(true);
+        //ui->boardDimension->setDisabled(true);
         ui->StartButton->setDisabled(true);
         ui->NextButton->setDisabled(true);
         disableCells(); // Disables all cell pushbuttons when game is on
 
         timer->start(500); // Starts calling the game function with 0.5 sec delay
-    }
+
 }
 
-void MainWindow::on_ClearButton_clicked() {
+/*void MainWindow::on_ClearButton_clicked() {
 // Clears the gameboard and stops the game (only if the game is on).
 
     if (gameState == false) {
@@ -273,13 +275,13 @@ void MainWindow::on_ClearButton_clicked() {
 
         // Changes the color of the New Game button, so that it's
         // clear what button should click next.
-        ui->createBoard->setStyleSheet("background-color: thistle");
+        //ui->createBoard->setStyleSheet("background-color: thistle");
         ui->createBoard->setDisabled(false);
         ui->boardDimension->setDisabled(false);
         changePushButtonsState(true);
         gameState = true;
     }
-}
+}*/
 
 void MainWindow::on_boardDimension_valueChanged(int arg1) {
 // Saves the SpinBox value to a variable, when the value is changed.
@@ -290,7 +292,6 @@ void MainWindow::on_boardDimension_valueChanged(int arg1) {
 void MainWindow::changePushButtonsState(bool state) {
 // Disables or enables pushbuttons depending on the function parameter
 
-    ui->ClearButton->setDisabled(state);
     ui->StartButton->setDisabled(state);
     ui->NextButton->setDisabled(state);
 }
@@ -298,16 +299,18 @@ void MainWindow::changePushButtonsState(bool state) {
 void MainWindow::on_createBoard_clicked() {
 // Creates a new gameboard when the New Game -button is clicked.
 
-    gameState = true;
-    ui->createBoard->setStyleSheet("background-color: lightgrey");
+    timer->stop(); // Stops the QTimer and the game loop stops running
 
     for (Node* node : allCells) { // Deletes all cells from a previous game
         delete node->cell;
     }
     allCells.clear(); // Clears all cells from the vector
-    if (round != 0) {
-        changePushButtonsState(false);
-    }
+    //if (round != 0) {
+        //changePushButtonsState(false);
+    //}
+    //ui->NextButton->setDisabled(false);
+    //ui->StartButton->setDisabled(false);
+    //ui->boardDimension->setDisabled(false);
     calculateCells();
     createBoard();
 }
@@ -316,8 +319,8 @@ void MainWindow::on_NextButton_clicked() {
 // Disables some pushbuttons and goes through the game function once, when
 // the Next button is clicked.
 
-    ui->createBoard->setDisabled(true);
-    ui->boardDimension->setDisabled(true);
+    //ui->createBoard->setDisabled(true);
+    //ui->boardDimension->setDisabled(true);
     disableCells(); // Disables all cells when the game is on
     game();
 }

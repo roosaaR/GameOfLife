@@ -88,18 +88,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ClearButton">
-       <property name="font">
-        <font>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Clear</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="createBoard">
        <property name="font">
         <font>
