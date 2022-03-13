@@ -52,13 +52,12 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
+         <family>Impact</family>
          <pointsize>14</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Game of Life    </string>
+        <string>Game of Life  </string>
        </property>
       </widget>
      </item>
