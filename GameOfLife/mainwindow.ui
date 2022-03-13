@@ -41,10 +41,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>10</y>
-      <width>511</width>
-      <height>27</height>
+      <width>501</width>
+      <height>28</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -52,12 +52,14 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <family>Gill Sans Ultra Bold Condensed</family>
+         <family>Impact</family>
          <pointsize>14</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Game of Life  </string>
+        <string>Game of Life    </string>
        </property>
       </widget>
      </item>
@@ -105,7 +107,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Create Board</string>
+        <string>New Game</string>
        </property>
       </widget>
      </item>
