@@ -13,7 +13,7 @@ part of the gui -elements are created in a Qt desing mode. Cells are PushButtons
 - If the cell is alive and it has 2 or 3 neighbours, it will remain alive. 
 ## How to play
 When the program starts, it creates a 15 x 15 board of initially dead grey cells. If the user wants to change the grid size, it can be done by choosing a new value between 15 and 40
-from the spinbox. Game starts when user clicks a New Game button. After that the user can set the initial state of the game by clicking cells, when the clicked cells turn purple.
+from the spinbox. Game starts when user clicks a New Game button. After that the user can set the initial state of the game by clicking cells, when the selected cells turn purple.
 When the user is happy with the initial state, the user can choose to run the game either sequentially by pressing the Next button multiple times or just pressing Start button 
 and the game starts to progress automatically. The user can also first use the Next button and switch to automatic mode, if desired. The game ends if all the cells turn back grey. 
 The game can also stay running continuously until the user presses the Clear Button and ends the game. User can start a new game by pressing the New Game button. 
